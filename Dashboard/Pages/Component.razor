@@ -1,0 +1,54 @@
+﻿@page "/Component"
+
+<h3>Populaire vragen (@todos.Count(item => !item.IsDone))</h3>
+
+<ul>
+    @foreach (var item in todos)
+    {
+    <li>
+        <input type="checkbox" @bind="@item.IsDone" />
+        @item.Title
+    </li>
+    }
+</ul>
+
+    <input placeholder="Stiekem vraag toevoegen?" @bind="newItem" />
+    <button @onclick="addItem">Voeg toe</button>
+
+    <input placeholder="Stiekeme vraag weer verwijderen?" @bind="oldItem" />
+    <button @onclick="deleteItem">Verwijder</button>
+
+@code {
+    private IList<TodoItem> todos = new List<TodoItem>()
+    {
+        new TodoItem {Title = "Reanimatie, hoe dan?", IsDone = false},
+        new TodoItem {Title = "Wat betekent \"oogabooga\"?", IsDone = false},
+        new TodoItem {Title = "Alexa?", IsDone = false},
+        new TodoItem {Title = "Hé Google", IsDone = false},
+        new TodoItem {Title = "Hoe roep je dit klote ding aan?", IsDone = false},
+        new TodoItem {Title = "Oooh hij luistert al, hopen dat niemand dit ziet", IsDone = false}
+    };
+
+    private string newItem;
+    private string oldItem;
+
+    private void addItem()
+    {
+        if (!string.IsNullOrWhiteSpace(newItem))
+        {
+            todos.Add(new TodoItem { Title = newItem });
+            newItem = string.Empty;
+        }
+    }
+
+    private void deleteItem()
+    {
+        foreach(var item in todos)
+        {
+            if (item.Title.Equals(oldItem))
+            {
+                todos.Remove(item);
+            }
+        }
+    }
+}
